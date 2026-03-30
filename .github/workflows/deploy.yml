@@ -1,0 +1,67 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  NODE_VERSION: 18
+  PNPM_VERSION: 8
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout Code
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Setup Node LTS
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      # Install pnpm
+      - name: Install pnpm
+        run: npm install -g pnpm@${{ env.PNPM_VERSION }}
+
+      # Install Dependencies
+      - name: Install Dependencies
+        run: pnpm install --ignore-scripts
+
+      # Build Project
+      - name: Build Project
+        run: pnpm build
+
+      # Verify Build Output Exists # Prevents empty deployment
+      - name: Validate Build Output
+        run: |
+          if [ ! -d "dist" ]; then
+            echo "Build failed - dist folder missing"
+            exit 1
+          fi
+
+      # Deploy to cPanel with SSH
+      # - name: Deploy via SSH
+      #   uses: easingthemes/ssh-deploy@main
+      #   with:
+      #     SSH_PRIVATE_KEY: ${{ secrets.CPANEL_SSH_KEY }}
+      #     REMOTE_HOST: ${{ secrets.CPANEL_HOST }}
+      #     REMOTE_USER: ${{ secrets.CPANEL_USERNAME }}
+      #     REMOTE_PORT: 22
+      #     SOURCE: dist/
+      #     TARGET: /home2/toutestg/parcelhub.toutestgrace.net
+      #     ARGS: "-rltgoDzvO --delete --verbose"
+
+      # Deploy to cPanel with FTP
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./dist/
+          server-dir: /parcelhub.toutestgrace.net/

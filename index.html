@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/logo.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TraceCoffield - Farmers & Coffee</title>
+  <link rel="stylesheet" type="text/css" href="/loader.css" />
+</head>
+
+<body>
+  <div id="app" style="font-family:Arial, Helvetica, sans-serif">
+    <div id="loading-bg">
+      <div class="loading-logo">
+        <img src="/logo.png" alt="" style="height: 100px;">
+      </div>
+      <div class=" loading">
+        <div class="effect-1 effects"></div>
+        <div class="effect-2 effects"></div>
+        <div class="effect-3 effects"></div>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="/src/main.js"></script>
+  <script>
+    const loaderColor = localStorage.getItem('vuexy-initial-loader-bg') || '#FFFFFF'
+    const primaryColor = localStorage.getItem('vuexy-initial-loader-color') || '#1b4332'
+
+    if (loaderColor)
+      document.documentElement.style.setProperty('--initial-loader-bg', loaderColor)
+
+    if (primaryColor)
+      document.documentElement.style.setProperty('--initial-loader-color', primaryColor)
+    </script>
+  </body>
+</html>
+
+<style scoped>
+  /* Clean up Google's "Top Bar" injection */
+:global(.skiptranslate) {
+  display: none !important;
+}
+:global(body) {
+  top: 0 !important;
+  position: static !important;
+}
+/* Remove Google Translate text highlight */
+.goog-text-highlight {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Remove dotted underline / tooltip trigger */
+.goog-text-highlight span {
+  text-decoration: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  
+}
+
+/* Remove any yellow background Google injects */
+font {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Prevent hover highlight */
+.goog-text-highlight:hover {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Optional: hide translate tooltip */
+#goog-gt-tt,
+.goog-te-balloon-frame {
+  display: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Prevent body shifting */
+body {
+  top: 0 !important;
+  position: static !important;
+}
+</style>
